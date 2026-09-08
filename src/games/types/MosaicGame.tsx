@@ -40,12 +40,107 @@ function flip(tiles: Tile[], setTiles: React.Dispatch<React.SetStateAction<Tile[
   }
 }
 
+function GlassTile({ color, face }: { color: string; face: 'back' | 'face' | 'done' }) {
+  const faceColor = color
+  let inner: React.ReactNode
+  if (face === 'back') {
+    inner = (
+      <>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            background:
+              'linear-gradient(150deg, #ffffff 0%, #e9e4f8 38%, #d9d2ef 62%, #c9bfe6 100%)',
+            boxShadow:
+              'inset 0 1px 0 #fff, inset 0 -5px 9px rgba(120,100,180,0.3), 0 6px 14px rgba(130,110,190,0.18)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            background: 'repeating-linear-gradient(-45deg, rgba(255,255,255,0.55) 0 10px, rgba(160,140,220,0.12) 10px 22px)',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            left: '18%',
+            top: '14%',
+            width: '30%',
+            height: '22%',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0))',
+          }}
+        />
+      </>
+    )
+  } else {
+    inner = (
+      <>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            background: `radial-gradient(circle at 32% 26%, #ffffff 0%, ${faceColor} 58%, #00000055 100%)`,
+            boxShadow:
+              'inset 0 2px 2px rgba(255,255,255,0.9), inset 0 -6px 10px rgba(0,0,0,0.28), 0 7px 16px rgba(0,0,0,0.18)',
+          }}
+        />
+        {/* face bevel */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: '14%',
+            borderRadius: '40%',
+            background: `linear-gradient(160deg, ${faceColor}66, transparent 60%)`,
+            filter: 'blur(1px)',
+          }}
+        />
+        {/* gloss streak */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '6%',
+            top: '5%',
+            right: '20%',
+            bottom: '65%',
+            borderRadius: '3px',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0))',
+            transform: 'rotate(-18deg)',
+            transformOrigin: 'left top',
+          }}
+        />
+      </>
+    )
+  }
+  return (
+    <div style={{ position: 'absolute', inset: 0 }}>
+      {inner}
+      {face === 'done' && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            background: 'radial-gradient(circle at 50% 40%, rgba(255,255,255,0.35), transparent 60%)',
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
 export default function MosaicGame({ gameId, onScoreUpdate }: { gameId: string; onScoreUpdate: (best: number) => void }) {
   const [tiles, setTiles] = useState<Tile[]>(makeTiles)
   const [open, setOpen] = useState<number[]>([])
 
   return (
-    <div className="game-wrap" style={{ background: 'linear-gradient(160deg, #fdf4ff, #fae8ff 50%, #ede9fe)' }}>
+    <div className="game-wrap" style={{ background: 'linear-gradient(160deg, #f5f3ff, #ede9fe 50%, #e0e7ff)' }}>
       <GameShell gameId={gameId} onScoreUpdate={onScoreUpdate}>
         {(api) => (
           <>
@@ -56,12 +151,12 @@ export default function MosaicGame({ gameId, onScoreUpdate }: { gameId: string; 
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: 10,
+                  gap: 12,
                   width: 'min(92%, 360px)',
-                  padding: 14,
-                  borderRadius: 24,
-                  background: 'rgba(255,255,255,0.55)',
-                  boxShadow: '0 16px 50px rgba(168,85,247,0.15)',
+                  padding: 16,
+                  borderRadius: 26,
+                  background: 'linear-gradient(160deg, #e0e7ff, #c7d2fe 70%, #a5b4fc)',
+                  boxShadow: 'inset 0 2px 2px rgba(255,255,255,0.7), inset 0 -6px 14px rgba(90,80,160,0.3), 0 18px 44px rgba(120,100,220,0.3)',
                 }}
               >
                 {tiles.map((t) => {
@@ -73,23 +168,41 @@ export default function MosaicGame({ gameId, onScoreUpdate }: { gameId: string; 
                       onClick={() => flip(tiles, setTiles, open, setOpen, t.id, api)}
                       style={{
                         aspectRatio: '1',
-                        borderRadius: 16,
+                        borderRadius: 18,
                         border: 'none',
                         cursor: 'pointer',
-                        background: t.matched
-                          ? t.color
-                          : isOpen
-                          ? `radial-gradient(circle at 30% 30%, ${t.color}cc, ${t.color})`
-                          : 'linear-gradient(145deg, #f5d0fe, #e9d5ff)',
-                        boxShadow: t.matched
-                          ? 'inset 0 -4px 0 rgba(0,0,0,0.15)'
-                          : isOpen
-                          ? '0 6px 20px rgba(168,85,247,0.35)'
-                          : 'inset 0 -6px 12px rgba(168,85,247,0.25), 0 6px 16px rgba(168,85,247,0.12)',
-                        transform: isOpen ? 'scale(0.94)' : 'scale(1)',
-                        transition: 'all 0.2s ease',
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transform: isOpen || t.matched ? 'scale(0.96)' : 'scale(1)',
+                        filter: t.matched ? 'drop-shadow(0 6px 14px rgba(120,80,220,0.4))' : isOpen ? 'drop-shadow(0 8px 18px rgba(110,90,220,0.4))' : 'none',
+                        transition: 'transform 0.2s ease, filter 0.2s ease',
                       }}
-                    />
+                    >
+                      {t.matched ? <GlassTile color={t.color} face="face" /> : isOpen ? <GlassTile color={t.color} face="face" /> : <GlassTile color={t.color} face="back" />}
+                      {isOpen && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: -2,
+                            borderRadius: 20,
+                            boxShadow: '0 0 0 2px rgba(255,255,255,0.9) inset',
+                            pointerEvents: 'none',
+                          }}
+                        />
+                      )}
+                      {t.matched && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            inset: -2,
+                            borderRadius: 20,
+                            boxShadow: '0 0 0 2px rgba(255,255,255,0.7) inset',
+                            pointerEvents: 'none',
+                            animation: 'mistPulse 1.6s ease-in-out infinite',
+                          }}
+                        />
+                      )}
+                    </button>
                   )
                 })}
               </div>

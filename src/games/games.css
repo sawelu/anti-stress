@@ -129,3 +129,80 @@
   0%, 100% { transform: translate(-50%, -50%) translateY(0); }
   50% { transform: translate(-50%, -50%) translateY(-12px); }
 }
+
+@keyframes bubbleWobble {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.035, 0.965); }
+}
+
+@keyframes bubbleRip {
+  0% { transform: scale(1); opacity: 1; filter: none; }
+  60% { transform: scale(1.15); opacity: 0.9; filter: blur(1px); }
+  100% { transform: scale(0.4); opacity: 0; filter: blur(4px); }
+}
+
+@keyframes catSway {
+  0%, 100% { transform: rotate(-1.6deg); }
+  50% { transform: rotate(1.6deg); }
+}
+
+@keyframes catBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes cloudDrift {
+  from { transform: translateX(-6px); }
+  to { transform: translateX(6px); }
+}
+
+@keyframes grainFall {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--gx), 34px) scale(0.6); opacity: 0; }
+}
+
+@keyframes ringExpand {
+  0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+}
+
+@keyframes flameFlicker {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  45% { transform: scale(1.08, 0.95); opacity: 0.9; }
+  60% { transform: scale(0.95, 1.06); }
+}
+
+@keyframes waveSway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-14px); }
+}
+
+@keyframes starSparkle {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.35); opacity: 1; }
+}
+
+@keyframes sailFlap {
+  0%, 100% { transform: rotate(var(--sailA, 0deg)) skewY(0deg); }
+  50% { transform: rotate(var(--sailA, 0deg)) skewY(1.5deg); }
+}
+
+@keyframes mistPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes vaporUp {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-46px) scale(1.6); opacity: 0; }
+}
+
+.bubble-wobble {
+  animation: bubbleWobble 1.7s ease-in-out infinite;
+}
+.bubble-rip {
+  animation: bubbleRip 0.45s ease-out forwards;
+}
+.wave-sway {
+  animation: waveSway 7s ease-in-out infinite;
+}

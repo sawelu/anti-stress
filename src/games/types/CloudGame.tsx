@@ -3,6 +3,39 @@ import { GameShell } from './GameShell'
 
 type Cloud = { id: number; x: number; y: number; vx: number; scale: number }
 
+function Cumulus({ w }: { w: number }) {
+  const h = w * 0.62
+  return (
+    <svg width={w} height={h} viewBox="0 0 220 140" style={{ display: 'block', overflow: 'visible' }}>
+      <defs>
+        <linearGradient id="clPuff" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="55%" stopColor="#f6fbff" />
+          <stop offset="88%" stopColor="#dbeaf7" />
+          <stop offset="100%" stopColor="#bcd3e8" />
+        </linearGradient>
+      </defs>
+      {/* shadow on ground of cloud */}
+      <ellipse cx="110" cy="126" rx="92" ry="9" fill="rgba(56,120,180,0.12)" />
+      {/* back puffs */}
+      <ellipse cx="78" cy="78" rx="36" ry="34" fill="url(#clPuff)" />
+      <ellipse cx="146" cy="84" rx="32" ry="30" fill="url(#clPuff)" />
+      <ellipse cx="112" cy="66" rx="42" ry="40" fill="url(#clPuff)" />
+      {/* front puffs */}
+      <ellipse cx="60" cy="96" rx="38" ry="30" fill="url(#clPuff)" />
+      <ellipse cx="118" cy="92" rx="46" ry="34" fill="url(#clPuff)" />
+      <ellipse cx="168" cy="100" rx="32" ry="26" fill="url(#clPuff)" />
+      {/* flat base */}
+      <rect x="34" y="100" width="152" height="30" rx="16" fill="url(#clPuff)" />
+      {/* bottom shading */}
+      <ellipse cx="110" cy="124" rx="92" ry="16" fill="rgba(160,190,220,0.35)" />
+      {/* sun-glow rim top-left */}
+      <ellipse cx="88" cy="62" rx="52" ry="30" fill="rgba(255,255,255,0.85)" />
+      <ellipse cx="130" cy="58" rx="42" ry="26" fill="rgba(255,255,255,0.55)" />
+    </svg>
+  )
+}
+
 export default function CloudGame({ gameId, onScoreUpdate }: { gameId: string; onScoreUpdate: (best: number) => void }) {
   const [clouds, setClouds] = useState<Cloud[]>(() =>
     Array.from({ length: 6 }, (_, i) => ({
@@ -28,35 +61,39 @@ export default function CloudGame({ gameId, onScoreUpdate }: { gameId: string; o
   }, [])
 
   return (
-    <div className="game-wrap" style={{ background: 'linear-gradient(180deg, #7dd3fc, #bae6fd 50%, #e0f2fe)' }}>
+    <div className="game-wrap" style={{ background: 'linear-gradient(180deg, #38bdf8, #7dd3fc 45%, #bae6fd)' }}>
       <GameShell gameId={gameId} onScoreUpdate={onScoreUpdate}>
         {(api) => (
           <>
-            <div className="game-hint" style={{ color: '#0369a1' }}>Тапай по облакам ☁️</div>
+            <div className="game-hint" style={{ color: '#075985' }}>Тапай по облакам ☁️</div>
             <div className="game-stage" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 25%, rgba(255,255,255,0.7), transparent 45%)', pointerEvents: 'none' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 70% 20%, rgba(255,255,255,0.85), transparent 50%)', pointerEvents: 'none' }} />
               {clouds.map((c) => (
                 <button
                   key={c.id}
                   type="button"
                   onClick={() => {
-                    setClouds((prev) => prev.map((x) => (x.id === c.id ? { ...x, vx: -x.vx, scale: 1.15 } : x)))
+                    setClouds((prev) => prev.map((x) => (x.id === c.id ? { ...x, vx: -x.vx, scale: x.scale * 0.9 } : x)))
                     api.add(1, 'cloud')
-                    window.setTimeout(() => setClouds((prev) => prev.map((x) => (x.id === c.id ? { ...x, scale: x.scale / 1.15 } : x))), 250)
+                    window.setTimeout(() => setClouds((prev) => prev.map((x) => (x.id === c.id ? { ...x, scale: x.scale / 0.9 } : x))), 240)
                   }}
                   className="cloud"
                   style={{
                     position: 'absolute',
                     left: `${c.x}%`,
                     top: `${c.y}%`,
-                    width: 110 * c.scale,
-                    height: 52 * c.scale,
                     transform: 'translate(-50%, -50%)',
-                    transition: 'width 0.2s ease, height 0.2s ease',
-                    background: 'radial-gradient(ellipse at 35% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.6) 55%, rgba(255,255,255,0.3))',
-                    boxShadow: '0 12px 34px rgba(2,132,199,0.25), inset 0 -8px 16px rgba(160,200,230,0.2), inset 0 8px 16px rgba(255,255,255,0.9)',
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer',
+                    filter: 'drop-shadow(0 18px 20px rgba(2,100,180,0.3))',
+                    animation: 'cloudDrift 2.4s ease-in-out infinite',
                   }}
-                />
+                >
+                  <div style={{ transform: `scale(${c.scale})`, transition: 'transform 0.22s ease' }}>
+                    <Cumulus w={128} />
+                  </div>
+                </button>
               ))}
             </div>
           </>
