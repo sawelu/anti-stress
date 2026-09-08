@@ -21,7 +21,7 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (store.toast.show && store.toast.text) {
-      playSound('success')
+      playSound('record')
     }
   }, [store.toast, playSound])
 

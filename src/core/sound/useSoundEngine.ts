@@ -7,7 +7,6 @@ const SOUND_SRC: Record<string, string> = {
   tick: `${BASE}sounds/tick.wav`,
   pop: `${BASE}sounds/pop.wav`,
   bubble: `${BASE}sounds/bubble.wav`,
-  purr: `${BASE}sounds/purr.wav`,
   meow: `${BASE}sounds/meow.wav`,
   sparkle: `${BASE}sounds/sparkle.wav`,
   ghost: `${BASE}sounds/ghost.wav`,
@@ -21,6 +20,7 @@ const SOUND_SRC: Record<string, string> = {
   cloud: `${BASE}sounds/cloud.wav`,
   swirl: `${BASE}sounds/swirl.wav`,
   success: `${BASE}sounds/success.wav`,
+  record: `${BASE}sounds/record.wav`,
 }
 
 export function useSoundEngine() {
