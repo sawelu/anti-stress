@@ -1,0 +1,27 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  transition: transform 0.15s ease;
+  white-space: nowrap;
+}
+.btn:active {
+  transform: scale(0.93);
+}
+.compact {
+  padding: 9px 12px;
+  font-size: 15px;
+}
+.label {
+  font-size: 13px;
+}
