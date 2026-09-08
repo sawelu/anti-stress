@@ -59,7 +59,7 @@ export default function CatGame({ gameId, onScoreUpdate }: { gameId: string; onS
                 <div
                   onClick={() => {
                     pet()
-                    api.add(2, 'meow')
+                    api.add(2, 'purr')
                   }}
                   className="cat-face"
                   style={{
